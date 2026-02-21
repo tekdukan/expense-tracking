@@ -136,7 +136,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebas
 import { getDatabase, ref, set, onValue } 
 from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-// 🔹 Firebase config
+// 🔹 Your Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyByWW8cAjA5BX_TPtU6015ale2pbqzNUWU",
   authDomain: "tekdukan-project.firebaseapp.com",
@@ -150,6 +150,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+
+// 🔹 Secret Key (matches your Firebase rules)
+const SECRET_KEY = "tekdukan123";
 
 // ----------------------------
 // 🔹 SAVE DATA
@@ -167,9 +170,9 @@ function saveData() {
         });
     });
 
-    // Add secret key for validation
+    // Add secret key for write permission
     const finalData = {
-        secret: "mypartnerkey",   // <-- your chosen secret key
+        secret: SECRET_KEY,
         salaryData: salaryArray
     };
 
@@ -180,20 +183,20 @@ function saveData() {
 // 🔹 LOAD DATA (REAL-TIME)
 // ----------------------------
 function loadData() {
-    const dataRef = ref(database, "salaryData");
+    const dataRef = ref(database, "/");
 
     onValue(dataRef, (snapshot) => {
         const saved = snapshot.val();
-        if (!saved) return;
+        if (!saved || !saved.salaryData) return;
 
         const rows = document.querySelectorAll("#salaryTable tr");
 
         rows.forEach((row, index) => {
-            if (saved[index]) {
+            if (saved.salaryData[index]) {
                 const inputs = row.querySelectorAll("input");
-                inputs[0].value = saved[index].salary;
-                inputs[1].value = saved[index].food;
-                inputs[2].value = saved[index].tips;
+                inputs[0].value = saved.salaryData[index].salary;
+                inputs[1].value = saved.salaryData[index].food;
+                inputs[2].value = saved.salaryData[index].tips;
             }
         });
 
@@ -219,7 +222,7 @@ function calculateTotals() {
         grandTotal += total;
     });
 
-    document.getElementById("grandTotal").innerText = grandTotal.toFixed(2);
+    document.getElementById("grandTotal").innerText = "$" + grandTotal.toFixed(2);
 }
 
 // Auto-save when typing
@@ -228,7 +231,7 @@ document.addEventListener("input", () => {
     saveData();
 });
 
-// Load on page open
+// Load data when page opens
 window.onload = loadData;
 
 </script>
