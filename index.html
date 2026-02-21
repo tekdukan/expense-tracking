@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Monthly Salary Tracker · May 2025 – Dec 2026</title>
+  <title>Aylık Maaş Takibi · Kasım 2025 – Aralık 2026</title>
   <style>
     /* MODERN MOBILE-FIRST DESIGN */
     * {
@@ -54,7 +54,7 @@
 
     /* HEADER SECTION */
     .header {
-      background: linear-gradient(145deg, #0b2a4a, #1e4b7a);
+      background: #008000;
       color: white;
       padding: 24px 20px 20px;
     }
@@ -67,6 +67,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .header h1 span {
@@ -116,13 +117,29 @@
       border-radius: 40px;
     }
 
-    /* TABLE AREA — CARD STYLE FOR MOBILE */
+    /* Month summary strip */
+    .month-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      opacity: 0.9;
+display: none
+    }
+
+    .month-tag {
+      background: #008000;
+      padding: 4px 10px;
+      border-radius: 30px;
+    }
+
+    /* CARD GRID */
     .table-wrapper {
       padding: 16px;
       background: white;
     }
 
-    /* Mobile-friendly card grid instead of traditional table */
     .period-grid {
       display: flex;
       flex-direction: column;
@@ -169,7 +186,8 @@
 
     .date-label {
       color: var(--primary-dark);
-      font-size: 1.05rem;
+      font-size: 1rem;
+      font-weight: 600;
     }
 
     .card-body {
@@ -244,7 +262,7 @@
 
     /* GRAND TOTAL */
     .grand-total-card {
-      background: linear-gradient(145deg, #0f2f5a, #1e4b7a);
+      background: #008000;
       color: white;
       padding: 22px 24px;
       border-radius: var(--radius-md);
@@ -274,40 +292,6 @@
       backdrop-filter: blur(4px);
     }
 
-    /* ACTIONS */
-    .actions {
-      display: flex;
-      justify-content: flex-end;
-      padding: 12px 16px 20px;
-      display:none
-    }
-
-    .btn {
-      background: white;
-      border: 1px solid var(--gray-200);
-      padding: 12px 28px;
-      border-radius: 40px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--gray-800);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: 0.15s;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .btn:hover {
-      background: var(--gray-100);
-      border-color: var(--accent);
-      color: var(--primary-dark);
-    }
-
-    .btn:active {
-      transform: scale(0.98);
-    }
-
     /* loading / error */
     .loading-state {
       text-align: center;
@@ -321,7 +305,7 @@
       body { background: white; padding: 0; }
       .header { background: #f0f0f0; color: black; }
       .grand-total-card { background: #eee; color: black; }
-      .btn, .status, .period-number { display: none; }
+      .status, .period-number { display: none; }
       input { border: none; background: transparent; }
     }
 
@@ -340,30 +324,32 @@
       .grand-total-number {
         font-size: 1.8rem;
       }
+      .date-label {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
 <div class="container">
-  <!-- Header with exact range -->
+  <!-- Header with Turkish flag and Lira -->
   <div class="header">
     <h1>
-      💰 Salary Tracker
-      <span>2025–2026</span>
+      🇹🇷 Aylık Maaş Takibi
+      <span>Kasım 2025 – Aralık 2026</span>
     </h1>
     <div class="date-range">
       <div class="date-badge">
-        <span class="badge">📅 20 periods</span>
-        <span class="badge">🇹🇷 TL</span>
+        <span class="badge">📅 14 ay</span>
+        <span class="badge">₺ Türk Lirası</span>
       </div>
       <div class="status" id="saveStatus">
-        <span>✨ Auto</span>
+        <span>✨ Otomatik</span>
       </div>
     </div>
-    <!-- explicit date rule -->
-    <div style="font-size:0.9rem; margin-top:8px; opacity:0.9; display:flex; flex-wrap:wrap; gap:12px;">
-      <span>📌 Period 1: 5/11/2025 – 30/11/2025</span>
-      <span>📌 Period 20: 1/12/2026 – 30/12/2026</span>
+    <!-- Month summary -->
+    <div class="month-summary" id="monthSummary">
+      <!-- Filled by JS -->
     </div>
   </div>
 
@@ -371,20 +357,13 @@
   <div class="table-wrapper">
     <div id="periodGrid" class="period-grid">
       <!-- filled by js -->
-      <div class="loading-state">Loading your salary data...</div>
+      <div class="loading-state">Veriler yükleniyor...</div>
     </div>
 
     <!-- Grand total card -->
     <div class="grand-total-card">
-      <span class="grand-total-label">GRAND TOTAL (all periods)</span>
+      <span class="grand-total-label">TOPLAM GENEL</span>
       <span class="grand-total-number" id="grandTotal">0.00</span>
-    </div>
-
-    <!-- action row -->
-    <div class="actions">
-      <button class="btn" id="resetToZeroBtn">
-        <span>↺</span> Reset all to zero
-      </button>
     </div>
   </div>
 </div>
@@ -393,7 +372,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
   import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-  // --- Firebase config (yours, unchanged) ---
+  // Firebase config (unchanged)
   const firebaseConfig = {
     apiKey: "AIzaSyByWW8cAjA5BX_TPtU6015ale2pbzNUWU",
     authDomain: "tekdukan-project.firebaseapp.com",
@@ -408,92 +387,66 @@
   const db = getDatabase(app);
   const dbRef = ref(db, '/');
 
-  // --- DOM elements ---
+  // DOM elements
   const grid = document.getElementById('periodGrid');
   const grandTotalSpan = document.getElementById('grandTotal');
   const saveStatus = document.getElementById('saveStatus');
-  const resetBtn = document.getElementById('resetToZeroBtn');
+  const monthSummary = document.getElementById('monthSummary');
 
-  // --- Helper: parse number or 0, non-negative ---
+  // Helper: parse number or 0, non-negative
   const parseInput = (val) => Math.max(0, parseFloat(val) || 0);
 
-  // --- Generate exact 20 periods with start/end dates as you specified ---
+  // ---------- CORRECT PERIOD GENERATION (Nov 2025 – Dec 2026) ----------
   function generateExactPeriods() {
     const periods = [];
+    const monthNamesTr = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+    const monthNamesEn = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     
-    // Period 1: 5/11/2025 – 30/11/2025
-    // Period 2: 1/12/2025 – 30/12/2025
-    // Period 3: 1/1/2026 – 30/1/2026   (Jan)
-    // Period 4: 1/2/2026 – 28/2/2026   (Feb)
-    // ... up to Period 20: 1/12/2026 – 30/12/2026
-
-    const startYear = 2025;
-    const startMonth = 10; // November (0-indexed: 10 = November)
-    const startDay = 5;    // 5th Nov 2025
-
-    let currentDate = new Date(2025, 10, 5); // 5 Nov 2025
-    
-    // Helper to get last day of month
-    const lastDayOfMonth = (year, month) => new Date(year, month + 1, 0).getDate();
-
-    for (let i = 0; i < 20; i++) {
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth(); // 0-11
+    // Start: Kasım 2025 (month index 10)
+    for (let i = 0; i < 14; i++) {
+      const year = 2025 + Math.floor((10 + i) / 12);
+      const month = (10 + i) % 12;
       
-      // start day: first period starts on 5, subsequent periods start on 1st
-      let startDayOfPeriod = (i === 0) ? 5 : 1;
-      // but if it's the first period (nov 2025) we already have startDay=5
-      if (i === 0) {
-        startDayOfPeriod = 5;
-      } else {
-        startDayOfPeriod = 1;
+      // Start day: first period starts on 5, others on 1
+      const startDay = (i === 0) ? 5 : 1;
+      
+      // End day: 30 except February (28)
+      let endDay = 30;
+      if (month === 1) { // Şubat
+        endDay = 28; // 2026 artık yıl değil
       }
       
-      // For February 2026 we need to handle 28 days
-      const lastDay = lastDayOfMonth(year, month);
-      
-      // End day: 30 for most months, but 28 for Feb 2026, 31 for some? Actually you specified 30 for all except feb.
-      // You wrote "30/11/2025", "30/12/2025" and then "30/12/2026" — but many months have 31 days.
-      // To be consistent with your description, we set end day = 30 for all months except February (28)
-      let endDayOfPeriod = 30;
-      if (month === 1) { // February
-        endDayOfPeriod = 28; // non-leap year 2026
-      } else if (lastDay < 30) {
-        endDayOfPeriod = lastDay; // just in case, but for 2026 all non-feb have at least 30
-      }
-      
-      // format start date
-      const startDateStr = `${startDayOfPeriod}/${month+1}/${year}`;
-      const endDateStr = `${endDayOfPeriod}/${month+1}/${year}`;
-      
-      // create label like "1. 5/11/2025 – 30/11/2025"
-      const label = `${i+1}.  ${startDateStr} – ${endDateStr}`;
+      // Create labels in Turkish and English (for reference)
+      const labelTr = `${i+1}.  ${startDay}/${month+1}/${year} – ${endDay}/${month+1}/${year} (${monthNamesTr[month]} ${year})`;
+      const shortLabel = `${monthNamesTr[month]} ${year}`;
       
       periods.push({
-        label: label,
+        label: labelTr,           // full Turkish label
+        shortLabel: shortLabel,
         salary: 0,
         food: 0,
         tips: 0
       });
-      
-      // move to next month (set to 1st of next month)
-      if (i === 0) {
-        // after first period, set to 1st dec 2025
-        currentDate = new Date(2025, 11, 1);
-      } else {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        currentDate.setDate(1);
-      }
     }
-    
     return periods;
   }
 
-  // --- Render cards from data array ---
+  // Render month summary chips
+  function renderMonthSummary(periods) {
+    let html = '';
+    periods.forEach(p => {
+      html += `<span class="month-tag">${p.shortLabel}</span>`;
+    });
+    monthSummary.innerHTML = html;
+  }
+
+  // Render cards from data array
   function renderCards(periods) {
     if (!periods || periods.length === 0) {
       periods = generateExactPeriods();
     }
+    
+    renderMonthSummary(periods);
     
     let html = '';
     periods.forEach((p, idx) => {
@@ -505,24 +458,24 @@
         <div class="period-card" data-index="${idx}">
           <div class="card-header">
             <span class="period-number">${idx+1}</span>
-            <span class="date-label">${p.label || `Period ${idx+1}`}</span>
+            <span class="date-label">${p.label || `Dönem ${idx+1}`}</span>
           </div>
           <div class="card-body">
             <div class="input-group">
-              <label>💰 Salary</label>
+              <label>💰 Maaş</label>
               <input type="number" min="0" step="0.01" class="salary-input" value="${salaryVal}" placeholder="0.00">
             </div>
             <div class="input-group">
-              <label>🍔 Food</label>
+              <label>🍔 Yemek</label>
               <input type="number" min="0" step="0.01" class="food-input" value="${foodVal}" placeholder="0.00">
             </div>
             <div class="input-group">
-              <label>💸 Tips</label>
+              <label>💸 Tip</label>
               <input type="number" min="0" step="0.01" class="tips-input" value="${tipsVal}" placeholder="0.00">
             </div>
           </div>
           <div class="row-total">
-            <span>Period total</span>
+            <span>Dönem toplamı</span>
             <span class="row-total-value" id="rowTotal-${idx}">₺0.00</span>
           </div>
         </div>
@@ -531,11 +484,11 @@
     
     grid.innerHTML = html;
     
-    // attach input listeners to each card's inputs
+    // Attach input listeners
     document.querySelectorAll('.period-card').forEach(card => {
       const inputs = card.querySelectorAll('input');
       inputs.forEach(inp => {
-        inp.addEventListener('input', function() {
+        inp.addEventListener('change	', function() {
           updateAllTotals();
           debounceSave();
         });
@@ -545,7 +498,7 @@
     updateAllTotals();
   }
 
-  // --- Update row totals and grand total ---
+  // Update row totals and grand total (₺)
   function updateAllTotals() {
     const cards = document.querySelectorAll('.period-card');
     let grand = 0;
@@ -566,17 +519,14 @@
     return grand;
   }
 
-  // --- Gather current data from DOM ---
+  // Gather current data from DOM
   function gatherData() {
     const cards = document.querySelectorAll('.period-card');
     const data = [];
     
     cards.forEach((card, idx) => {
-      // Extract label from header (keep original format)
-      const headerLabel = card.querySelector('.date-label')?.textContent || `Period ${idx+1}`;
-      
+      // We don't need to save labels; they will be regenerated on load
       data.push({
-        label: headerLabel,
         salary: parseInput(card.querySelector('.salary-input')?.value),
         food: parseInput(card.querySelector('.food-input')?.value),
         tips: parseInput(card.querySelector('.tips-input')?.value)
@@ -586,7 +536,7 @@
     return data;
   }
 
-  // --- Debounce + save to Firebase ---
+  // Debounce + save to Firebase
   let saveTimer;
   function debounceSave() {
     if (saveTimer) clearTimeout(saveTimer);
@@ -597,76 +547,59 @@
 
   function saveToFirebase() {
     const data = gatherData();
-    saveStatus.innerHTML = '<span>⏳ Saving…</span>';
+    saveStatus.innerHTML = '<span>⏳ Kaydediliyor…</span>';
     
     set(dbRef, { salaryData: data })
       .then(() => {
-        saveStatus.innerHTML = '<span>✅ Saved</span>';
+        saveStatus.innerHTML = '<span>✅ Kaydedildi</span>';
         setTimeout(() => {
-          if (saveStatus.innerHTML.includes('Saved')) {
-            saveStatus.innerHTML = '<span>✨ Auto</span>';
+          if (saveStatus.innerHTML.includes('Kaydedildi')) {
+            saveStatus.innerHTML = '<span>✨ Otomatik</span>';
           }
         }, 2000);
       })
       .catch(err => {
         console.error(err);
-        saveStatus.innerHTML = '<span>❌ Error</span>';
+        saveStatus.innerHTML = '<span>❌ Hata</span>';
       });
   }
 
-  // --- Load from Firebase ---
+  // Load from Firebase and force correct labels
   function loadFromFirebase() {
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
-      let periods;
+      
+      // Always start with the correct 14 periods (with fresh labels)
+      const correctPeriods = generateExactPeriods();
       
       if (data && Array.isArray(data.salaryData) && data.salaryData.length > 0) {
-        // Use saved, but ensure 20 items
-        periods = data.salaryData.slice(0, 20);
-        // if less than 20, pad with generated ones
-        if (periods.length < 20) {
-          const defaultPeriods = generateExactPeriods();
-          for (let i = periods.length; i < 20; i++) {
-            periods.push(defaultPeriods[i]);
+        // Map saved values onto correct periods (preserve values, discard old labels)
+        const saved = data.salaryData.slice(0, 14); // max 14
+        for (let i = 0; i < saved.length; i++) {
+          if (saved[i]) {
+            correctPeriods[i].salary = saved[i].salary ?? 0;
+            correctPeriods[i].food = saved[i].food ?? 0;
+            correctPeriods[i].tips = saved[i].tips ?? 0;
           }
         }
-        // ensure each has label from default if missing
-        const defaultLabels = generateExactPeriods();
-        periods = periods.map((p, i) => ({
-          label: p.label || defaultLabels[i].label,
-          salary: p.salary ?? 0,
-          food: p.food ?? 0,
-          tips: p.tips ?? 0
-        }));
-      } else {
-        periods = generateExactPeriods();
       }
       
-      renderCards(periods);
-      saveStatus.innerHTML = '<span>✨ Auto</span>';
+      renderCards(correctPeriods);
+      saveStatus.innerHTML = '<span>✨ Otomatik</span>';
     }, (err) => {
-      console.warn('Firebase read failed, using defaults', err);
+      console.warn('Firebase okunamadı, varsayılan kullanılıyor', err);
       renderCards(generateExactPeriods());
-      saveStatus.innerHTML = '<span>⚠️ Offline</span>';
+      saveStatus.innerHTML = '<span>⚠️ Çevrimdışı</span>';
     });
   }
 
-  // --- Reset all inputs to zero (and save) ---
-  resetBtn.addEventListener('click', () => {
-    document.querySelectorAll('.period-card input').forEach(inp => {
-      inp.value = '0.00';
-    });
-    updateAllTotals();
-    saveToFirebase();
-  });
-
-  // --- Initialise ---
+  // Initialize
   loadFromFirebase();
 
-  // --- Optional save before unload ---
+  // Save before unload
   window.addEventListener('beforeunload', () => {
     if (saveTimer) clearTimeout(saveTimer);
-    saveToFirebase(); // synchronous best effort
+    saveToFirebase();
   });
 </script>
 </body>
