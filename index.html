@@ -2,218 +2,390 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Monthly Salary Tracker (2025–2026)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Monthly Salary Tracker · May 2025 – Dec 2026</title>
   <style>
+    /* MODERN MOBILE-FIRST DESIGN */
     * {
       box-sizing: border-box;
-    }
-    body {
-      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-      background: #f0f2f5;
       margin: 0;
-      padding: 16px;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #1a4b8c;
+      --primary-light: #eef5ff;
+      --primary-dark: #0f2f5a;
+      --accent: #3b82f6;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-600: #475569;
+      --gray-800: #1e293b;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+      --radius-sm: 12px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--gray-100);
+      color: var(--gray-800);
+      line-height: 1.5;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #1a2639;
+      padding: 12px;
     }
+
     .container {
-      max-width: 1200px;
+      max-width: 800px;
       width: 100%;
       background: white;
-      padding: 24px 28px;
-      border-radius: 24px;
-      box-shadow: 0 20px 40px -12px rgba(0, 20, 30, 0.2);
-      transition: all 0.2s ease;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      transition: all 0.2s;
     }
-    h1 {
-      margin: 0 0 4px 0;
+
+    /* HEADER SECTION */
+    .header {
+      background: linear-gradient(145deg, #0b2a4a, #1e4b7a);
+      color: white;
+      padding: 24px 20px 20px;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
       font-weight: 600;
-      font-size: 1.9rem;
-      letter-spacing: -0.5px;
-      background: linear-gradient(145deg, #1e3c72, #2a5298);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .subtitle {
-      color: #4a5568;
-      margin-bottom: 28px;
+
+    .header h1 span {
+      background: rgba(255,255,255,0.15);
+      font-size: 1rem;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-weight: 400;
+    }
+
+    .date-range {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
       font-size: 0.95rem;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .date-badge {
       display: flex;
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
     }
+
     .badge {
-      background: #e9eef3;
-      padding: 6px 14px;
+      background: rgba(255,255,255,0.25);
+      padding: 5px 14px;
       border-radius: 40px;
+      font-weight: 500;
       font-size: 0.85rem;
-      font-weight: 500;
-      color: #2c3e50;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      background: rgba(0,0,0,0.2);
+      padding: 5px 14px;
+      border-radius: 40px;
     }
-    thead {
-      background: linear-gradient(145deg, #1e3c72, #2b4a8f);
-      color: white;
-    }
-    th {
-      padding: 16px 8px;
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.8rem;
-      letter-spacing: 0.6px;
-      text-align: center;
-    }
-    td {
-      padding: 12px 6px;
-      border-bottom: 1px solid #e2e8f0;
-      text-align: center;
-      background-color: white;
-    }
-    tbody tr {
-      transition: background 0.15s;
-    }
-    tbody tr:hover td {
-      background-color: #f8faff;
-    }
-    input {
-      width: 100px;
-      padding: 10px 8px;
-      border: 1px solid #cbd5e0;
-      border-radius: 14px;
-      font-size: 0.9rem;
-      text-align: center;
-      background: #f9fafc;
-      transition: 0.2s;
-      font-weight: 500;
-    }
-    input:focus {
-      outline: none;
-      border-color: #4f7df3;
-      box-shadow: 0 0 0 3px rgba(79,125,243,0.2);
+
+    /* TABLE AREA — CARD STYLE FOR MOBILE */
+    .table-wrapper {
+      padding: 16px;
       background: white;
     }
-    input[type="number"] {
+
+    /* Mobile-friendly card grid instead of traditional table */
+    .period-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .period-card {
+      background: var(--gray-50);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+      transition: 0.15s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .period-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(59,130,246,0.15);
+    }
+
+    .card-header {
+      background: white;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--gray-200);
+      font-weight: 600;
+    }
+
+    .period-number {
+      background: var(--primary);
+      color: white;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .date-label {
+      color: var(--primary-dark);
+      font-size: 1.05rem;
+    }
+
+    .card-body {
+      padding: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .input-group {
+      flex: 1 1 100px;
+      min-width: 80px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-600);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 10px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 18px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: center;
+      background: white;
+      transition: 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
+    }
+
+    .input-group input[type="number"] {
       -moz-appearance: textfield;
     }
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
+    .input-group input[type="number"]::-webkit-outer-spin-button,
+    .input-group input[type="number"]::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
-    .total-cell {
-      font-weight: 700;
-      color: #1e3c72;
-      background-color: #f0f4fe !important;
-      border-radius: 0 0 8px 8px;
-    }
-    .grand-total {
-      margin-top: 28px;
-      padding: 18px 24px;
-      background: #f0f4fa;
-      border-radius: 60px;
-      font-size: 1.6rem;
-      font-weight: 700;
-      text-align: right;
-      color: #0f2b4f;
+
+    .row-total {
+      background: var(--primary-light);
+      padding: 10px 16px;
       display: flex;
       align-items: center;
-      justify-content: flex-end;
-      gap: 20px;
+      justify-content: space-between;
+      border-top: 1px solid var(--gray-200);
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+
+    .row-total-value {
+      font-size: 1.2rem;
+      background: white;
+      padding: 6px 20px;
+      border-radius: 40px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* GRAND TOTAL */
+    .grand-total-card {
+      background: linear-gradient(145deg, #0f2f5a, #1e4b7a);
+      color: white;
+      padding: 22px 24px;
+      border-radius: var(--radius-md);
+      margin: 8px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: var(--shadow-md);
     }
+
     .grand-total-label {
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 400;
-      text-transform: uppercase;
       letter-spacing: 1px;
-      color: #3b4e6b;
+      opacity: 0.9;
     }
-    .loading {
-      text-align: center;
-      padding: 50px;
-      color: #64748b;
-      font-style: italic;
+
+    .grand-total-number {
+      font-size: 2.4rem;
+      font-weight: 700;
+      line-height: 1;
+      background: rgba(255,255,255,0.15);
+      padding: 10px 24px;
+      border-radius: 60px;
+      backdrop-filter: blur(4px);
     }
-    .footer-actions {
+
+    /* ACTIONS */
+    .actions {
       display: flex;
       justify-content: flex-end;
-      margin-top: 12px;
+      padding: 12px 16px 20px;
+      display:none
     }
+
     .btn {
       background: white;
-      border: 1px solid #cbd5e0;
-      padding: 8px 16px;
+      border: 1px solid var(--gray-200);
+      padding: 12px 28px;
       border-radius: 40px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: #2d3748;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--gray-800);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       cursor: pointer;
       transition: 0.15s;
+      box-shadow: var(--shadow-sm);
     }
+
     .btn:hover {
-      background: #edf2f7;
-      border-color: #a0b8d4;
+      background: var(--gray-100);
+      border-color: var(--accent);
+      color: var(--primary-dark);
     }
-    .status {
-      font-size: 0.8rem;
-      color: #4a7a9c;
-      margin-left: auto;
+
+    .btn:active {
+      transform: scale(0.98);
     }
+
+    /* loading / error */
+    .loading-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--gray-600);
+      font-size: 1rem;
+    }
+
+    /* print */
     @media print {
       body { background: white; padding: 0; }
-      .container { box-shadow: none; padding: 10px; }
+      .header { background: #f0f0f0; color: black; }
+      .grand-total-card { background: #eee; color: black; }
+      .btn, .status, .period-number { display: none; }
       input { border: none; background: transparent; }
-      .btn, .status { display: none; }
     }
-    @media (max-width: 700px) {
-      .container { padding: 16px; }
-      th, td { padding: 8px 3px; }
-      input { width: 70px; padding: 8px 4px; }
-      h1 { font-size: 1.6rem; }
+
+    /* small screens adjustments */
+    @media (max-width: 480px) {
+      .card-body {
+        gap: 8px;
+      }
+      .input-group {
+        flex: 1 1 calc(33.333% - 8px);
+      }
+      .input-group input {
+        padding: 12px 4px;
+        font-size: 0.9rem;
+      }
+      .grand-total-number {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>📆 Salary Tracker 2025–2026</h1>
-  <div class="subtitle">
-    <span class="badge">🇪🇺 Europe · EUR</span>
-    <span class="badge">📅 20 pay periods (May 2025 – Dec 2026)</span>
-    <span class="status" id="saveStatus">✨ Auto‑saving</span>
+  <!-- Header with exact range -->
+  <div class="header">
+    <h1>
+      💰 Salary Tracker
+      <span>2025–2026</span>
+    </h1>
+    <div class="date-range">
+      <div class="date-badge">
+        <span class="badge">📅 20 periods</span>
+        <span class="badge">🇹🇷 TL</span>
+      </div>
+      <div class="status" id="saveStatus">
+        <span>✨ Auto</span>
+      </div>
+    </div>
+    <!-- explicit date rule -->
+    <div style="font-size:0.9rem; margin-top:8px; opacity:0.9; display:flex; flex-wrap:wrap; gap:12px;">
+      <span>📌 Period 1: 5/11/2025 – 30/11/2025</span>
+      <span>📌 Period 20: 1/12/2026 – 30/12/2026</span>
+    </div>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Month</th>
-        <th>Salary (₺)</th>
-        <th>Food (₺)</th>
-        <th>Tips (₺)</th>
-        <th>Period total</th>
-      </tr>
-    </thead>
-    <tbody id="salaryTable">
-      <tr><td colspan="6" class="loading">Loading data…</td></tr>
-    </tbody>
-  </table>
+  <!-- Dynamic card grid (mobile friendly) -->
+  <div class="table-wrapper">
+    <div id="periodGrid" class="period-grid">
+      <!-- filled by js -->
+      <div class="loading-state">Loading your salary data...</div>
+    </div>
 
-  <div class="grand-total">
-    <span class="grand-total-label">GRAND TOTAL</span>
-    <span id="grandTotal">0.00</span>
-  </div>
-  <div class="footer-actions">
-    <button class="btn" id="resetToZeroBtn" title="Reset all entries to zero (local only)">↺ Reset all</button>
+    <!-- Grand total card -->
+    <div class="grand-total-card">
+      <span class="grand-total-label">GRAND TOTAL (all periods)</span>
+      <span class="grand-total-number" id="grandTotal">0.00</span>
+    </div>
+
+    <!-- action row -->
+    <div class="actions">
+      <button class="btn" id="resetToZeroBtn">
+        <span>↺</span> Reset all to zero
+      </button>
+    </div>
   </div>
 </div>
 
@@ -221,7 +393,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
   import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-  // --- Firebase configuration (demo key) ---
+  // --- Firebase config (yours, unchanged) ---
   const firebaseConfig = {
     apiKey: "AIzaSyByWW8cAjA5BX_TPtU6015ale2pbzNUWU",
     authDomain: "tekdukan-project.firebaseapp.com",
@@ -234,243 +406,267 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-  const dbRef = ref(db, '/'); // root reference
+  const dbRef = ref(db, '/');
 
   // --- DOM elements ---
-  const tbody = document.getElementById('salaryTable');
+  const grid = document.getElementById('periodGrid');
   const grandTotalSpan = document.getElementById('grandTotal');
   const saveStatus = document.getElementById('saveStatus');
   const resetBtn = document.getElementById('resetToZeroBtn');
 
-  // --- Helpers ---
-  const formatMoney = (value) => value.toFixed(2);
-  const parseInput = (val) => Math.max(0, parseFloat(val) || 0); // non‑negative
+  // --- Helper: parse number or 0, non-negative ---
+  const parseInput = (val) => Math.max(0, parseFloat(val) || 0);
 
-  // --- Generate month labels from May 2025 to December 2026 (20 months) ---
-  function generateMonthPeriods() {
+  // --- Generate exact 20 periods with start/end dates as you specified ---
+  function generateExactPeriods() {
     const periods = [];
-    const start = new Date(2025, 4, 1);  // May 2025 (month 4 = May)
-    const end = new Date(2026, 11, 1);   // Dec 2026
-    const current = new Date(start);
+    
+    // Period 1: 5/11/2025 – 30/11/2025
+    // Period 2: 1/12/2025 – 30/12/2025
+    // Period 3: 1/1/2026 – 30/1/2026   (Jan)
+    // Period 4: 1/2/2026 – 28/2/2026   (Feb)
+    // ... up to Period 20: 1/12/2026 – 30/12/2026
 
-    while (current <= end) {
-      const year = current.getFullYear();
-      const month = current.getMonth();
-      const monthName = new Intl.DateTimeFormat('en', { month: 'short' }).format(current);
+    const startYear = 2025;
+    const startMonth = 10; // November (0-indexed: 10 = November)
+    const startDay = 5;    // 5th Nov 2025
+
+    let currentDate = new Date(2025, 10, 5); // 5 Nov 2025
+    
+    // Helper to get last day of month
+    const lastDayOfMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+
+    for (let i = 0; i < 20; i++) {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth(); // 0-11
+      
+      // start day: first period starts on 5, subsequent periods start on 1st
+      let startDayOfPeriod = (i === 0) ? 5 : 1;
+      // but if it's the first period (nov 2025) we already have startDay=5
+      if (i === 0) {
+        startDayOfPeriod = 5;
+      } else {
+        startDayOfPeriod = 1;
+      }
+      
+      // For February 2026 we need to handle 28 days
+      const lastDay = lastDayOfMonth(year, month);
+      
+      // End day: 30 for most months, but 28 for Feb 2026, 31 for some? Actually you specified 30 for all except feb.
+      // You wrote "30/11/2025", "30/12/2025" and then "30/12/2026" — but many months have 31 days.
+      // To be consistent with your description, we set end day = 30 for all months except February (28)
+      let endDayOfPeriod = 30;
+      if (month === 1) { // February
+        endDayOfPeriod = 28; // non-leap year 2026
+      } else if (lastDay < 30) {
+        endDayOfPeriod = lastDay; // just in case, but for 2026 all non-feb have at least 30
+      }
+      
+      // format start date
+      const startDateStr = `${startDayOfPeriod}/${month+1}/${year}`;
+      const endDateStr = `${endDayOfPeriod}/${month+1}/${year}`;
+      
+      // create label like "1. 5/11/2025 – 30/11/2025"
+      const label = `${i+1}.  ${startDateStr} – ${endDateStr}`;
+      
       periods.push({
-        label: `${monthName} ${year}`,
+        label: label,
         salary: 0,
         food: 0,
         tips: 0
       });
-      current.setMonth(current.getMonth() + 1);
+      
+      // move to next month (set to 1st of next month)
+      if (i === 0) {
+        // after first period, set to 1st dec 2025
+        currentDate = new Date(2025, 11, 1);
+      } else {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        currentDate.setDate(1);
+      }
     }
+    
     return periods;
   }
 
-  // --- Render table rows from data array ---
-  function renderTable(periods) {
-    tbody.innerHTML = ''; // clear loading / old rows
-
-    periods.forEach((entry, idx) => {
-      const row = document.createElement('tr');
-      row.dataset.index = idx;
-
-      // period number + label
-      const cellNum = document.createElement('td');
-      cellNum.textContent = (idx + 1).toString();
-      row.appendChild(cellNum);
-
-      const cellLabel = document.createElement('td');
-      cellLabel.textContent = entry.label || `Period ${idx+1}`;
-      row.appendChild(cellLabel);
-
-      // input fields
-      const salaryCell = document.createElement('td');
-      const salaryInput = document.createElement('input');
-      salaryInput.type = 'number';
-      salaryInput.min = '0';
-      salaryInput.step = '0.01';
-      salaryInput.value = entry.salary.toFixed(2);
-      salaryInput.placeholder = '0.00';
-      salaryCell.appendChild(salaryInput);
-      row.appendChild(salaryCell);
-
-      const foodCell = document.createElement('td');
-      const foodInput = document.createElement('input');
-      foodInput.type = 'number';
-      foodInput.min = '0';
-      foodInput.step = '0.01';
-      foodInput.value = entry.food.toFixed(2);
-      foodInput.placeholder = '0.00';
-      foodCell.appendChild(foodInput);
-      row.appendChild(foodCell);
-
-      const tipsCell = document.createElement('td');
-      const tipsInput = document.createElement('input');
-      tipsInput.type = 'number';
-      tipsInput.min = '0';
-      tipsInput.step = '0.01';
-      tipsInput.value = entry.tips.toFixed(2);
-      tipsInput.placeholder = '0.00';
-      tipsCell.appendChild(tipsInput);
-      row.appendChild(tipsCell);
-
-      // total cell
-      const totalCell = document.createElement('td');
-      totalCell.className = 'total-cell';
-      totalCell.textContent = '₺0.00';
-      row.appendChild(totalCell);
-
-      tbody.appendChild(row);
+  // --- Render cards from data array ---
+  function renderCards(periods) {
+    if (!periods || periods.length === 0) {
+      periods = generateExactPeriods();
+    }
+    
+    let html = '';
+    periods.forEach((p, idx) => {
+      const salaryVal = (p.salary || 0).toFixed(2);
+      const foodVal = (p.food || 0).toFixed(2);
+      const tipsVal = (p.tips || 0).toFixed(2);
+      
+      html += `
+        <div class="period-card" data-index="${idx}">
+          <div class="card-header">
+            <span class="period-number">${idx+1}</span>
+            <span class="date-label">${p.label || `Period ${idx+1}`}</span>
+          </div>
+          <div class="card-body">
+            <div class="input-group">
+              <label>💰 Salary</label>
+              <input type="number" min="0" step="0.01" class="salary-input" value="${salaryVal}" placeholder="0.00">
+            </div>
+            <div class="input-group">
+              <label>🍔 Food</label>
+              <input type="number" min="0" step="0.01" class="food-input" value="${foodVal}" placeholder="0.00">
+            </div>
+            <div class="input-group">
+              <label>💸 Tips</label>
+              <input type="number" min="0" step="0.01" class="tips-input" value="${tipsVal}" placeholder="0.00">
+            </div>
+          </div>
+          <div class="row-total">
+            <span>Period total</span>
+            <span class="row-total-value" id="rowTotal-${idx}">₺0.00</span>
+          </div>
+        </div>
+      `;
     });
-
-    // after rendering, calculate totals (so each total cell gets filled)
-    calculateAllTotals();
-  }
-
-  // --- Calculate totals for each row and the grand total ---
-  function calculateAllTotals() {
-    const rows = tbody.querySelectorAll('tr');
-    let grand = 0;
-
-    rows.forEach(row => {
-      const inputs = row.querySelectorAll('input');
-      if (inputs.length < 3) return;
-
-      const salary = parseInput(inputs[0].value);
-      const food = parseInput(inputs[1].value);
-      const tips = parseInput(inputs[2].value);
-      const rowTotal = salary + food + tips;
-
-      const totalCell = row.querySelector('.total-cell');
-      if (totalCell) totalCell.textContent = '₺' + formatMoney(rowTotal);
-
-      grand += rowTotal;
-    });
-
-    grandTotalSpan.textContent = formatMoney(grand);
-  }
-
-  // --- Collect current table data into an array of objects ---
-  function getCurrentData() {
-    const rows = tbody.querySelectorAll('tr');
-    const data = [];
-
-    rows.forEach((row, index) => {
-      const inputs = row.querySelectorAll('input');
-      if (inputs.length < 3) return;
-
-      // label is in second column (textContent)
-      const labelCell = row.cells[1];
-      const label = labelCell ? labelCell.textContent : `Period ${index+1}`;
-
-      data.push({
-        label: label,
-        salary: parseInput(inputs[0].value),
-        food: parseInput(inputs[1].value),
-        tips: parseInput(inputs[2].value)
+    
+    grid.innerHTML = html;
+    
+    // attach input listeners to each card's inputs
+    document.querySelectorAll('.period-card').forEach(card => {
+      const inputs = card.querySelectorAll('input');
+      inputs.forEach(inp => {
+        inp.addEventListener('input', function() {
+          updateAllTotals();
+          debounceSave();
+        });
       });
     });
+    
+    updateAllTotals();
+  }
 
+  // --- Update row totals and grand total ---
+  function updateAllTotals() {
+    const cards = document.querySelectorAll('.period-card');
+    let grand = 0;
+    
+    cards.forEach((card, idx) => {
+      const salary = parseInput(card.querySelector('.salary-input')?.value);
+      const food = parseInput(card.querySelector('.food-input')?.value);
+      const tips = parseInput(card.querySelector('.tips-input')?.value);
+      const rowSum = salary + food + tips;
+      
+      const rowTotalSpan = document.getElementById(`rowTotal-${idx}`);
+      if (rowTotalSpan) rowTotalSpan.textContent = '₺' + rowSum.toFixed(2);
+      
+      grand += rowSum;
+    });
+    
+    grandTotalSpan.textContent = grand.toFixed(2);
+    return grand;
+  }
+
+  // --- Gather current data from DOM ---
+  function gatherData() {
+    const cards = document.querySelectorAll('.period-card');
+    const data = [];
+    
+    cards.forEach((card, idx) => {
+      // Extract label from header (keep original format)
+      const headerLabel = card.querySelector('.date-label')?.textContent || `Period ${idx+1}`;
+      
+      data.push({
+        label: headerLabel,
+        salary: parseInput(card.querySelector('.salary-input')?.value),
+        food: parseInput(card.querySelector('.food-input')?.value),
+        tips: parseInput(card.querySelector('.tips-input')?.value)
+      });
+    });
+    
     return data;
   }
 
-  // --- Save data to Firebase (with basic status feedback) ---
-  let saveTimeout;
-  function saveToFirebase() {
-    // clear any pending save
-    if (saveTimeout) clearTimeout(saveTimeout);
-
-    // debounce: wait 400ms after last input to save
-    saveTimeout = setTimeout(() => {
-      const data = getCurrentData();
-      saveStatus.textContent = '⏳ Saving…';
-
-      set(dbRef, { salaryData: data })
-        .then(() => {
-          saveStatus.textContent = '✅ Saved';
-          setTimeout(() => {
-            if (saveStatus.textContent === '✅ Saved') {
-              saveStatus.textContent = '✨ Auto‑saving';
-            }
-          }, 1800);
-        })
-        .catch((error) => {
-          console.error('Firebase write failed:', error);
-          saveStatus.textContent = '❌ Save error';
-        });
-    }, 400);
+  // --- Debounce + save to Firebase ---
+  let saveTimer;
+  function debounceSave() {
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      saveToFirebase();
+    }, 500);
   }
 
-  // --- Load data from Firebase and update UI ---
+  function saveToFirebase() {
+    const data = gatherData();
+    saveStatus.innerHTML = '<span>⏳ Saving…</span>';
+    
+    set(dbRef, { salaryData: data })
+      .then(() => {
+        saveStatus.innerHTML = '<span>✅ Saved</span>';
+        setTimeout(() => {
+          if (saveStatus.innerHTML.includes('Saved')) {
+            saveStatus.innerHTML = '<span>✨ Auto</span>';
+          }
+        }, 2000);
+      })
+      .catch(err => {
+        console.error(err);
+        saveStatus.innerHTML = '<span>❌ Error</span>';
+      });
+  }
+
+  // --- Load from Firebase ---
   function loadFromFirebase() {
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
       let periods;
-
+      
       if (data && Array.isArray(data.salaryData) && data.salaryData.length > 0) {
-        // Use saved data, but ensure it has 20 entries (in case structure changed)
-        periods = data.salaryData;
-        // If saved data has fewer items (e.g., old version), pad with generated months
+        // Use saved, but ensure 20 items
+        periods = data.salaryData.slice(0, 20);
+        // if less than 20, pad with generated ones
         if (periods.length < 20) {
-          const defaultPeriods = generateMonthPeriods();
+          const defaultPeriods = generateExactPeriods();
           for (let i = periods.length; i < 20; i++) {
             periods.push(defaultPeriods[i]);
           }
-        } else if (periods.length > 20) {
-          periods = periods.slice(0, 20); // keep only first 20
         }
-        // Ensure each entry has label (migration)
-        const defaultLabels = generateMonthPeriods();
-        periods = periods.map((p, idx) => ({
-          label: p.label || defaultLabels[idx]?.label || `Period ${idx+1}`,
+        // ensure each has label from default if missing
+        const defaultLabels = generateExactPeriods();
+        periods = periods.map((p, i) => ({
+          label: p.label || defaultLabels[i].label,
           salary: p.salary ?? 0,
           food: p.food ?? 0,
           tips: p.tips ?? 0
         }));
       } else {
-        // No saved data → generate fresh month periods
-        periods = generateMonthPeriods();
+        periods = generateExactPeriods();
       }
-
-      renderTable(periods);
-      saveStatus.textContent = '✨ Auto‑saving';
-    }, (error) => {
-      console.error('Firebase read failed:', error);
-      tbody.innerHTML = `<tr><td colspan="6" style="color:#b91c1c;">⚠️ Failed to load data. Using default periods.</td></tr>`;
-      // fallback to default periods
-      renderTable(generateMonthPeriods());
+      
+      renderCards(periods);
+      saveStatus.innerHTML = '<span>✨ Auto</span>';
+    }, (err) => {
+      console.warn('Firebase read failed, using defaults', err);
+      renderCards(generateExactPeriods());
+      saveStatus.innerHTML = '<span>⚠️ Offline</span>';
     });
   }
 
-  // --- Event listener for input changes (auto‑save + recalc) ---
-  tbody.addEventListener('input', (e) => {
-    if (e.target.tagName === 'INPUT') {
-      calculateAllTotals();
-      saveToFirebase();
-    }
-  });
-
-  // --- Reset all inputs to zero (without saving immediately) ---
+  // --- Reset all inputs to zero (and save) ---
   resetBtn.addEventListener('click', () => {
-    const rows = tbody.querySelectorAll('tr');
-    rows.forEach(row => {
-      const inputs = row.querySelectorAll('input');
-      inputs.forEach(inp => inp.value = '0.00');
+    document.querySelectorAll('.period-card input').forEach(inp => {
+      inp.value = '0.00';
     });
-    calculateAllTotals();
-    saveToFirebase(); // save the reset state
+    updateAllTotals();
+    saveToFirebase();
   });
 
-  // --- Start the app ---
+  // --- Initialise ---
   loadFromFirebase();
 
-  // --- Optional: save before user leaves the page ---
+  // --- Optional save before unload ---
   window.addEventListener('beforeunload', () => {
-    if (saveTimeout) clearTimeout(saveTimeout);
-    const data = getCurrentData();
-    set(dbRef, { salaryData: data }).catch(() => {});
+    if (saveTimer) clearTimeout(saveTimer);
+    saveToFirebase(); // synchronous best effort
   });
 </script>
 </body>
