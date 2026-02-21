@@ -187,7 +187,7 @@ function loadData() {
 
     onValue(dataRef, (snapshot) => {
         const saved = snapshot.val();
-        if (!saved || !saved.salaryData) return;
+        if (!saved || !saved.salaryData) return; // check salaryData exists
 
         const rows = document.querySelectorAll("#salaryTable tr");
 
@@ -203,7 +203,6 @@ function loadData() {
         calculateTotals();
     });
 }
-
 // ----------------------------
 // 🔹 CALCULATE TOTALS
 // ----------------------------
