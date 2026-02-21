@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Monthly Salary Tracker (2025–2026)</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 5px;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    .subtitle {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    thead {
+        background: linear-gradient(135deg, #4e73df, #224abe);
+        color: white;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+        font-size: 14px;
+    }
+
+    th {
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #f8f9fc;
+    }
+
+    tbody tr:hover {
+        background-color: #eef2ff;
+    }
+
+    input {
+        width: 90px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        text-align: center;
+    }
+
+    .total-cell {
+        font-weight: 600;
+        color: #224abe;
+    }
+
+    .grand-total {
+        margin-top: 20px;
+        padding: 15px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: right;
+        border-top: 2px solid #ddd;
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+        .container {
+            box-shadow: none;
+            border-radius: 0;
+        }
+        input {
+            border: none;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Monthly Salary Tracking Sheet</h1>
+    <div class="subtitle">Tracking Period: 5/11/2025 – 12/12/2026</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Pay Period</th>
+                <th>Salary</th>
+                <th>Food</th>
+                <th>Tips</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody id="salaryTable">
+        </tbody>
+    </table>
+
+    <div class="grand-total">
+        Grand Total: $<span id="grandTotal">0.00</span>
+    </div>
+</div>
+
+<script>
+const periods = [
+"5/11/2025 - 30/11/2025",
+"1/12/2025 - 31/12/2025",
+"1/01/2026 - 31/01/2026",
+"1/02/2026 - 28/02/2026",
+"1/03/2026 - 31/03/2026",
+"1/04/2026 - 30/04/2026",
+"1/05/2026 - 31/05/2026",
+"1/06/2026 - 30/06/2026",
+"1/07/2026 - 31/07/2026",
+"1/08/2026 - 31/08/2026",
+"1/09/2026 - 30/09/2026",
+"1/10/2026 - 31/10/2026",
+"1/11/2026 - 30/11/2026",
+"1/12/2026 - 31/12/2026"
+];
+
+const table = document.getElementById("salaryTable");
+
+periods.forEach((period, index) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${period}</td>
+        <td><input type="number" step="0.01"></td>
+        <td><input type="number" step="0.01"></td>
+        <td><input type="number" step="0.01"></td>
+        <td class="total-cell">$0.00</td>
+    `;
+
+    table.appendChild(row);
+});
+
+function calculate() {
+    let grandTotal = 0;
+    const rows = document.querySelectorAll("#salaryTable tr");
+    let savedData = [];
+
+    rows.forEach((row, index) => {
+        const inputs = row.querySelectorAll("input");
+        const salary = parseFloat(inputs[0].value) || 0;
+        const food = parseFloat(inputs[1].value) || 0;
+        const tips = parseFloat(inputs[2].value) || 0;
+
+        const total = salary + food + tips;
+        row.querySelector(".total-cell").innerText = "$" + total.toFixed(2);
+        grandTotal += total;
+
+        savedData.push({ salary, food, tips });
+    });
+
+    document.getElementById("grandTotal").innerText = grandTotal.toFixed(2);
+
+    localStorage.setItem("salaryData", JSON.stringify(savedData));
+}
+
+function loadData() {
+    const saved = JSON.parse(localStorage.getItem("salaryData"));
+    if (!saved) return;
+
+    const rows = document.querySelectorAll("#salaryTable tr");
+
+    rows.forEach((row, index) => {
+        if (saved[index]) {
+            const inputs = row.querySelectorAll("input");
+            inputs[0].value = saved[index].salary;
+            inputs[1].value = saved[index].food;
+            inputs[2].value = saved[index].tips;
+        }
+    });
+
+    calculate();
+}
+
+document.addEventListener("input", calculate);
+window.onload = loadData;
+</script>
+
+</body>
+</html>
