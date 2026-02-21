@@ -331,6 +331,25 @@ display: none
   </style>
 </head>
 <body>
+
+<div id="loginOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; align-items: center; justify-content: center;">
+  <div style="background: #f0f2f5; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center; max-width: 300px;">
+    <h2 style="margin-bottom: 20px; color: #1a4b8c;">🔒 Maaş Takibi</h2>
+    <input type="password" id="passwordInput" placeholder="Şifre" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px;">
+    <button onclick="checkPassword()" style="background: #1a4b8c; color: white; border: none; padding: 12px 30px; border-radius: 10px; font-size: 16px; cursor: pointer; width: 100%;">Giriş</button>
+    <p id="loginError" style="color: red; margin-top: 10px; display: none;">Yanlış şifre!</p>
+  </div>
+</div>
+
+<script>
+  function checkPassword() {
+    if (document.getElementById('passwordInput').value === 'nam') {
+      document.getElementById('loginOverlay').style.display = 'none';
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+</script>
 <div class="container">
   <!-- Header with Turkish flag and Lira -->
   <div class="header">
@@ -488,7 +507,7 @@ display: none
     document.querySelectorAll('.period-card').forEach(card => {
       const inputs = card.querySelectorAll('input');
       inputs.forEach(inp => {
-        inp.addEventListener('change	', function() {
+        inp.addEventListener('input', function() {
           updateAllTotals();
           debounceSave();
         });
