@@ -1,232 +1,477 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Monthly Salary Tracker (2025–2026)</title>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monthly Salary Tracker (2025–2026)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
-        font-family: 'Segoe UI', Tahoma, sans-serif;
-        background: #f4f6f9;
-        margin: 0;
-        padding: 40px;
-        color: #333;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 16px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1a2639;
     }
-
     .container {
-        max-width: 1000px;
-        margin: auto;
-        background: #ffffff;
-        padding: 30px 40px;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      max-width: 1200px;
+      width: 100%;
+      background: white;
+      padding: 24px 28px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px -12px rgba(0, 20, 30, 0.2);
+      transition: all 0.2s ease;
     }
-
     h1 {
-        text-align: center;
-        margin-bottom: 5px;
-        font-weight: 600;
-        letter-spacing: 1px;
+      margin: 0 0 4px 0;
+      font-weight: 600;
+      font-size: 1.9rem;
+      letter-spacing: -0.5px;
+      background: linear-gradient(145deg, #1e3c72, #2a5298);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-
     .subtitle {
-        text-align: center;
-        margin-bottom: 30px;
-        color: #666;
-        font-size: 14px;
+      color: #4a5568;
+      margin-bottom: 28px;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
-
+    .badge {
+      background: #e9eef3;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #2c3e50;
+    }
     table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
-
     thead {
-        background: linear-gradient(135deg, #4e73df, #224abe);
-        color: white;
+      background: linear-gradient(145deg, #1e3c72, #2b4a8f);
+      color: white;
     }
-
-    th, td {
-        padding: 10px;
-        text-align: center;
-        border: 1px solid #ddd;
-        font-size: 14px;
-    }
-
     th {
-        text-transform: uppercase;
-        font-size: 12px;
-        letter-spacing: 0.5px;
+      padding: 16px 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.6px;
+      text-align: center;
     }
-
-    tbody tr:nth-child(even) {
-        background-color: #f8f9fc;
+    td {
+      padding: 12px 6px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: center;
+      background-color: white;
     }
-
-    tbody tr:hover {
-        background-color: #eef2ff;
+    tbody tr {
+      transition: background 0.15s;
     }
-
+    tbody tr:hover td {
+      background-color: #f8faff;
+    }
     input {
-        width: 90px;
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        text-align: center;
+      width: 100px;
+      padding: 10px 8px;
+      border: 1px solid #cbd5e0;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      text-align: center;
+      background: #f9fafc;
+      transition: 0.2s;
+      font-weight: 500;
     }
-
+    input:focus {
+      outline: none;
+      border-color: #4f7df3;
+      box-shadow: 0 0 0 3px rgba(79,125,243,0.2);
+      background: white;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
     .total-cell {
-        font-weight: 600;
-        color: #224abe;
+      font-weight: 700;
+      color: #1e3c72;
+      background-color: #f0f4fe !important;
+      border-radius: 0 0 8px 8px;
     }
-
     .grand-total {
-        margin-top: 20px;
-        padding: 15px;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: right;
-        border-top: 2px solid #ddd;
+      margin-top: 28px;
+      padding: 18px 24px;
+      background: #f0f4fa;
+      border-radius: 60px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      text-align: right;
+      color: #0f2b4f;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 20px;
+      flex-wrap: wrap;
     }
-
+    .grand-total-label {
+      font-size: 1rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #3b4e6b;
+    }
+    .loading {
+      text-align: center;
+      padding: 50px;
+      color: #64748b;
+      font-style: italic;
+    }
+    .footer-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+    .btn {
+      background: white;
+      border: 1px solid #cbd5e0;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #2d3748;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .btn:hover {
+      background: #edf2f7;
+      border-color: #a0b8d4;
+    }
+    .status {
+      font-size: 0.8rem;
+      color: #4a7a9c;
+      margin-left: auto;
+    }
     @media print {
-        body {
-            background: white;
-            padding: 0;
-        }
-        .container {
-            box-shadow: none;
-            border-radius: 0;
-        }
-        input {
-            border: none;
-        }
+      body { background: white; padding: 0; }
+      .container { box-shadow: none; padding: 10px; }
+      input { border: none; background: transparent; }
+      .btn, .status { display: none; }
     }
-</style>
+    @media (max-width: 700px) {
+      .container { padding: 16px; }
+      th, td { padding: 8px 3px; }
+      input { width: 70px; padding: 8px 4px; }
+      h1 { font-size: 1.6rem; }
+    }
+  </style>
 </head>
 <body>
-
 <div class="container">
-    <h1>Monthly Salary Tracking Sheet</h1>
-    <div class="subtitle">Tracking Period: 5/11/2025 – 12/12/2026</div>
+  <h1>📆 Salary Tracker 2025–2026</h1>
+  <div class="subtitle">
+    <span class="badge">🇪🇺 Europe · EUR</span>
+    <span class="badge">📅 20 pay periods (May 2025 – Dec 2026)</span>
+    <span class="status" id="saveStatus">✨ Auto‑saving</span>
+  </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Pay Period</th>
-                <th>Salary</th>
-                <th>Food</th>
-                <th>Tips</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody id="salaryTable">
-        </tbody>
-    </table>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Month</th>
+        <th>Salary (₺)</th>
+        <th>Food (₺)</th>
+        <th>Tips (₺)</th>
+        <th>Period total</th>
+      </tr>
+    </thead>
+    <tbody id="salaryTable">
+      <tr><td colspan="6" class="loading">Loading data…</td></tr>
+    </tbody>
+  </table>
 
-    <div class="grand-total">
-        Grand Total: $<span id="grandTotal">0.00</span>
-    </div>
+  <div class="grand-total">
+    <span class="grand-total-label">GRAND TOTAL</span>
+    <span id="grandTotal">0.00</span>
+  </div>
+  <div class="footer-actions">
+    <button class="btn" id="resetToZeroBtn" title="Reset all entries to zero (local only)">↺ Reset all</button>
+  </div>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getDatabase, ref, set, onValue } 
-from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyByWW8cAjA5BX_TPtU6015ale2pbqzNUWU",
-  authDomain: "tekdukan-project.firebaseapp.com",
-  databaseURL: "https://tekdukan-project-default-rtdb.europe-west1.firebasedatabase.app/",
-  projectId: "tekdukan-project",
-  storageBucket: "tekdukan-project.firebasestorage.app",
-  messagingSenderId: "175858309683",
-  appId: "1:175858309683:web:68655faaf61e75210da146"
-};
+  // --- Firebase configuration (demo key) ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyByWW8cAjA5BX_TPtU6015ale2pbzNUWU",
+    authDomain: "tekdukan-project.firebaseapp.com",
+    databaseURL: "https://tekdukan-project-default-rtdb.europe-west1.firebasedatabase.app/",
+    projectId: "tekdukan-project",
+    storageBucket: "tekdukan-project.firebasestorage.app",
+    messagingSenderId: "175858309683",
+    appId: "1:175858309683:web:68655faaf61e75210da146"
+  };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
-const SECRET_KEY = "tekdukan123";
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const dbRef = ref(db, '/'); // root reference
 
-const tableBody = document.getElementById("salaryTable");
+  // --- DOM elements ---
+  const tbody = document.getElementById('salaryTable');
+  const grandTotalSpan = document.getElementById('grandTotal');
+  const saveStatus = document.getElementById('saveStatus');
+  const resetBtn = document.getElementById('resetToZeroBtn');
 
-// Save data
-function saveData() {
-    const rows = document.querySelectorAll("#salaryTable tr");
-    let salaryArray = [];
+  // --- Helpers ---
+  const formatMoney = (value) => value.toFixed(2);
+  const parseInput = (val) => Math.max(0, parseFloat(val) || 0); // non‑negative
+
+  // --- Generate month labels from May 2025 to December 2026 (20 months) ---
+  function generateMonthPeriods() {
+    const periods = [];
+    const start = new Date(2025, 4, 1);  // May 2025 (month 4 = May)
+    const end = new Date(2026, 11, 1);   // Dec 2026
+    const current = new Date(start);
+
+    while (current <= end) {
+      const year = current.getFullYear();
+      const month = current.getMonth();
+      const monthName = new Intl.DateTimeFormat('en', { month: 'short' }).format(current);
+      periods.push({
+        label: `${monthName} ${year}`,
+        salary: 0,
+        food: 0,
+        tips: 0
+      });
+      current.setMonth(current.getMonth() + 1);
+    }
+    return periods;
+  }
+
+  // --- Render table rows from data array ---
+  function renderTable(periods) {
+    tbody.innerHTML = ''; // clear loading / old rows
+
+    periods.forEach((entry, idx) => {
+      const row = document.createElement('tr');
+      row.dataset.index = idx;
+
+      // period number + label
+      const cellNum = document.createElement('td');
+      cellNum.textContent = (idx + 1).toString();
+      row.appendChild(cellNum);
+
+      const cellLabel = document.createElement('td');
+      cellLabel.textContent = entry.label || `Period ${idx+1}`;
+      row.appendChild(cellLabel);
+
+      // input fields
+      const salaryCell = document.createElement('td');
+      const salaryInput = document.createElement('input');
+      salaryInput.type = 'number';
+      salaryInput.min = '0';
+      salaryInput.step = '0.01';
+      salaryInput.value = entry.salary.toFixed(2);
+      salaryInput.placeholder = '0.00';
+      salaryCell.appendChild(salaryInput);
+      row.appendChild(salaryCell);
+
+      const foodCell = document.createElement('td');
+      const foodInput = document.createElement('input');
+      foodInput.type = 'number';
+      foodInput.min = '0';
+      foodInput.step = '0.01';
+      foodInput.value = entry.food.toFixed(2);
+      foodInput.placeholder = '0.00';
+      foodCell.appendChild(foodInput);
+      row.appendChild(foodCell);
+
+      const tipsCell = document.createElement('td');
+      const tipsInput = document.createElement('input');
+      tipsInput.type = 'number';
+      tipsInput.min = '0';
+      tipsInput.step = '0.01';
+      tipsInput.value = entry.tips.toFixed(2);
+      tipsInput.placeholder = '0.00';
+      tipsCell.appendChild(tipsInput);
+      row.appendChild(tipsCell);
+
+      // total cell
+      const totalCell = document.createElement('td');
+      totalCell.className = 'total-cell';
+      totalCell.textContent = '₺0.00';
+      row.appendChild(totalCell);
+
+      tbody.appendChild(row);
+    });
+
+    // after rendering, calculate totals (so each total cell gets filled)
+    calculateAllTotals();
+  }
+
+  // --- Calculate totals for each row and the grand total ---
+  function calculateAllTotals() {
+    const rows = tbody.querySelectorAll('tr');
+    let grand = 0;
 
     rows.forEach(row => {
-        const inputs = row.querySelectorAll("input");
-        salaryArray.push({
-            salary: parseFloat(inputs[0].value) || 0,
-            food: parseFloat(inputs[1].value) || 0,
-            tips: parseFloat(inputs[2].value) || 0
-        });
+      const inputs = row.querySelectorAll('input');
+      if (inputs.length < 3) return;
+
+      const salary = parseInput(inputs[0].value);
+      const food = parseInput(inputs[1].value);
+      const tips = parseInput(inputs[2].value);
+      const rowTotal = salary + food + tips;
+
+      const totalCell = row.querySelector('.total-cell');
+      if (totalCell) totalCell.textContent = '₺' + formatMoney(rowTotal);
+
+      grand += rowTotal;
     });
 
-    const finalData = { secret: SECRET_KEY, salaryData: salaryArray };
-    set(ref(database, "/"), finalData);
-}
+    grandTotalSpan.textContent = formatMoney(grand);
+  }
 
-// Calculate totals
-function calculateTotals() {
-    let grandTotal = 0;
-    const rows = document.querySelectorAll("#salaryTable tr");
+  // --- Collect current table data into an array of objects ---
+  function getCurrentData() {
+    const rows = tbody.querySelectorAll('tr');
+    const data = [];
 
+    rows.forEach((row, index) => {
+      const inputs = row.querySelectorAll('input');
+      if (inputs.length < 3) return;
+
+      // label is in second column (textContent)
+      const labelCell = row.cells[1];
+      const label = labelCell ? labelCell.textContent : `Period ${index+1}`;
+
+      data.push({
+        label: label,
+        salary: parseInput(inputs[0].value),
+        food: parseInput(inputs[1].value),
+        tips: parseInput(inputs[2].value)
+      });
+    });
+
+    return data;
+  }
+
+  // --- Save data to Firebase (with basic status feedback) ---
+  let saveTimeout;
+  function saveToFirebase() {
+    // clear any pending save
+    if (saveTimeout) clearTimeout(saveTimeout);
+
+    // debounce: wait 400ms after last input to save
+    saveTimeout = setTimeout(() => {
+      const data = getCurrentData();
+      saveStatus.textContent = '⏳ Saving…';
+
+      set(dbRef, { salaryData: data })
+        .then(() => {
+          saveStatus.textContent = '✅ Saved';
+          setTimeout(() => {
+            if (saveStatus.textContent === '✅ Saved') {
+              saveStatus.textContent = '✨ Auto‑saving';
+            }
+          }, 1800);
+        })
+        .catch((error) => {
+          console.error('Firebase write failed:', error);
+          saveStatus.textContent = '❌ Save error';
+        });
+    }, 400);
+  }
+
+  // --- Load data from Firebase and update UI ---
+  function loadFromFirebase() {
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      let periods;
+
+      if (data && Array.isArray(data.salaryData) && data.salaryData.length > 0) {
+        // Use saved data, but ensure it has 20 entries (in case structure changed)
+        periods = data.salaryData;
+        // If saved data has fewer items (e.g., old version), pad with generated months
+        if (periods.length < 20) {
+          const defaultPeriods = generateMonthPeriods();
+          for (let i = periods.length; i < 20; i++) {
+            periods.push(defaultPeriods[i]);
+          }
+        } else if (periods.length > 20) {
+          periods = periods.slice(0, 20); // keep only first 20
+        }
+        // Ensure each entry has label (migration)
+        const defaultLabels = generateMonthPeriods();
+        periods = periods.map((p, idx) => ({
+          label: p.label || defaultLabels[idx]?.label || `Period ${idx+1}`,
+          salary: p.salary ?? 0,
+          food: p.food ?? 0,
+          tips: p.tips ?? 0
+        }));
+      } else {
+        // No saved data → generate fresh month periods
+        periods = generateMonthPeriods();
+      }
+
+      renderTable(periods);
+      saveStatus.textContent = '✨ Auto‑saving';
+    }, (error) => {
+      console.error('Firebase read failed:', error);
+      tbody.innerHTML = `<tr><td colspan="6" style="color:#b91c1c;">⚠️ Failed to load data. Using default periods.</td></tr>`;
+      // fallback to default periods
+      renderTable(generateMonthPeriods());
+    });
+  }
+
+  // --- Event listener for input changes (auto‑save + recalc) ---
+  tbody.addEventListener('input', (e) => {
+    if (e.target.tagName === 'INPUT') {
+      calculateAllTotals();
+      saveToFirebase();
+    }
+  });
+
+  // --- Reset all inputs to zero (without saving immediately) ---
+  resetBtn.addEventListener('click', () => {
+    const rows = tbody.querySelectorAll('tr');
     rows.forEach(row => {
-        const inputs = row.querySelectorAll("input");
-        const salary = parseFloat(inputs[0].value) || 0;
-        const food = parseFloat(inputs[1].value) || 0;
-        const tips = parseFloat(inputs[2].value) || 0;
-
-        const total = salary + food + tips;
-        row.querySelector(".total-cell").innerText = "$" + total.toFixed(2);
-        grandTotal += total;
+      const inputs = row.querySelectorAll('input');
+      inputs.forEach(inp => inp.value = '0.00');
     });
+    calculateAllTotals();
+    saveToFirebase(); // save the reset state
+  });
 
-    document.getElementById("grandTotal").innerText = "$" + grandTotal.toFixed(2);
-}
+  // --- Start the app ---
+  loadFromFirebase();
 
-// Load data dynamically
-function loadData() {
-    const dataRef = ref(database, "/");
-
-    onValue(dataRef, (snapshot) => {
-        const saved = snapshot.val();
-        tableBody.innerHTML = ""; // clear table first
-        if (!saved || !saved.salaryData) return;
-
-        saved.salaryData.forEach((entry, index) => {
-            const row = document.createElement("tr");
-
-            row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>Period ${index + 1}</td>
-                <td><input type="number" value="${entry.salary}"></td>
-                <td><input type="number" value="${entry.food}"></td>
-                <td><input type="number" value="${entry.tips}"></td>
-                <td class="total-cell">$0.00</td>
-            `;
-
-            tableBody.appendChild(row);
-        });
-
-        calculateTotals();
-    });
-}
-
-// Auto-save on input
-document.addEventListener("input", () => {
-    calculateTotals();
-    saveData();
-});
-
-// Initialize
-window.onload = loadData;
+  // --- Optional: save before user leaves the page ---
+  window.addEventListener('beforeunload', () => {
+    if (saveTimeout) clearTimeout(saveTimeout);
+    const data = getCurrentData();
+    set(dbRef, { salaryData: data }).catch(() => {});
+  });
 </script>
-
 </body>
 </html>
