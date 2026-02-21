@@ -131,12 +131,11 @@
 </div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
 import { getDatabase, ref, set, onValue } 
 from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-// 🔹 Your Firebase config
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyByWW8cAjA5BX_TPtU6015ale2pbqzNUWU",
   authDomain: "tekdukan-project.firebaseapp.com",
@@ -150,13 +149,11 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-
-// 🔹 Secret Key (matches your Firebase rules)
 const SECRET_KEY = "tekdukan123";
 
-// ----------------------------
-// 🔹 SAVE DATA
-// ----------------------------
+const tableBody = document.getElementById("salaryTable");
+
+// Save data
 function saveData() {
     const rows = document.querySelectorAll("#salaryTable tr");
     let salaryArray = [];
@@ -170,42 +167,11 @@ function saveData() {
         });
     });
 
-    // Add secret key for write permission
-    const finalData = {
-        secret: SECRET_KEY,
-        salaryData: salaryArray
-    };
-
+    const finalData = { secret: SECRET_KEY, salaryData: salaryArray };
     set(ref(database, "/"), finalData);
 }
 
-// ----------------------------
-// 🔹 LOAD DATA (REAL-TIME)
-// ----------------------------
-function loadData() {
-    const dataRef = ref(database, "/");
-
-    onValue(dataRef, (snapshot) => {
-        const saved = snapshot.val();
-        if (!saved || !saved.salaryData) return; // check salaryData exists
-
-        const rows = document.querySelectorAll("#salaryTable tr");
-
-        rows.forEach((row, index) => {
-            if (saved.salaryData[index]) {
-                const inputs = row.querySelectorAll("input");
-                inputs[0].value = saved.salaryData[index].salary;
-                inputs[1].value = saved.salaryData[index].food;
-                inputs[2].value = saved.salaryData[index].tips;
-            }
-        });
-
-        calculateTotals();
-    });
-}
-// ----------------------------
-// 🔹 CALCULATE TOTALS
-// ----------------------------
+// Calculate totals
 function calculateTotals() {
     let grandTotal = 0;
     const rows = document.querySelectorAll("#salaryTable tr");
@@ -224,15 +190,42 @@ function calculateTotals() {
     document.getElementById("grandTotal").innerText = "$" + grandTotal.toFixed(2);
 }
 
-// Auto-save when typing
+// Load data dynamically
+function loadData() {
+    const dataRef = ref(database, "/");
+
+    onValue(dataRef, (snapshot) => {
+        const saved = snapshot.val();
+        tableBody.innerHTML = ""; // clear table first
+        if (!saved || !saved.salaryData) return;
+
+        saved.salaryData.forEach((entry, index) => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>Period ${index + 1}</td>
+                <td><input type="number" value="${entry.salary}"></td>
+                <td><input type="number" value="${entry.food}"></td>
+                <td><input type="number" value="${entry.tips}"></td>
+                <td class="total-cell">$0.00</td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+
+        calculateTotals();
+    });
+}
+
+// Auto-save on input
 document.addEventListener("input", () => {
     calculateTotals();
     saveData();
 });
 
-// Load data when page opens
+// Initialize
 window.onload = loadData;
-
 </script>
 
 </body>
