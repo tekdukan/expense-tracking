@@ -156,18 +156,24 @@ const database = getDatabase(app);
 // ----------------------------
 function saveData() {
     const rows = document.querySelectorAll("#salaryTable tr");
-    let data = [];
+    let salaryArray = [];
 
     rows.forEach(row => {
         const inputs = row.querySelectorAll("input");
-        data.push({
+        salaryArray.push({
             salary: parseFloat(inputs[0].value) || 0,
             food: parseFloat(inputs[1].value) || 0,
             tips: parseFloat(inputs[2].value) || 0
         });
     });
 
-    set(ref(database, "salaryData"), data);
+    // Add secret key for validation
+    const finalData = {
+        secret: "tekdukan123",   // <-- your chosen secret key
+        salaryData: salaryArray
+    };
+
+    set(ref(database, "/"), finalData);
 }
 
 // ----------------------------
